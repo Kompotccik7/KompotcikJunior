@@ -1,7 +1,9 @@
 import discord
 import json
 from discord.ext import commands
+from discord import app_commands
 import asyncio
+import datetime
 
 #ladowanie konfiguracji
 with open("config.json", "r") as file:
@@ -50,6 +52,7 @@ async def help(interaction: discord.Interaction):
     await interaction.response.send_message(embed=embed)
 
 #clearowanie
+@app_commands.checks.has_permissions(manage_messages=True)
 @client.tree.command(name="clear", description="czysci czat")
 async def clear(interaction :discord.Interaction, amount:int):
     #czyszczenie
@@ -60,6 +63,16 @@ async def clear(interaction :discord.Interaction, amount:int):
     await asyncio.sleep(2)
     wiadomosc = await interaction.original_response()
     await wiadomosc.delete()
+
+#mute
+@client.tree.command(name="mute", description="jak nazwa wskazuje")
+@app_commands.checks.has_permissions(mute_members=True)
+async def mute(interaction :discord.Interaction, member:discord.Member,time:int):
+   #mute
+   await member.timeout(datetime.timedelta(minutes=time))
+   #wyslanie embeda
+   embed=discord.Embed(title=f"{member.display_name} dostal mute", color=discord.Color.orange())
+   await interaction.response.send_message(embed=embed)
 
 #start
 @client.event
