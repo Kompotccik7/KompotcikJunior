@@ -1,0 +1,60 @@
+import discord
+import json
+from discord.ext import commands
+
+#ladowanie konfiguracji
+with open("config.json", "r") as file:
+    config = json.load(file)
+
+token = config['token']
+
+#jakies gowno
+intents = discord.Intents.default()
+intents.message_content = True
+
+#klient
+client = commands.Bot(command_prefix='!',intents=intents)
+
+#pomoc
+@client.tree.command(name="pomoc", description="pomocy ratunku")
+async def help(interaction: discord.Interaction):   
+    embed = discord.Embed(
+        title="Pomoc",
+        color=discord.Color.orange()
+    ) 
+    embed.add_field(
+        name="1. Centrum wsparcia",
+        value="https://centrumwsparcia.pl",
+        inline=False
+    )
+    embed.add_field(
+        name="2. strona do pomocy nwm",
+        value="https://GiveAndGetHelp.com",
+        inline=False
+    )
+    embed.add_field(
+        name="3. jak jestes uzalezniony",
+        value="https://PoradniaUzaleznienia.pl",
+        inline=False
+    )
+    embed.add_field(
+        name="4. Zawsze mozesz zadzwonic po policje albo karetke",
+        value='''Pogotowie ratunkowe - 999
+        Policja - 997''',
+        inline=False
+    )
+    embed.set_footer(
+        text="Mam nadzieje ze wiesz gdzie znalezc pomoc XD"
+    )
+    await interaction.response.send_message(embed=embed)
+
+#start
+@client.event
+async def on_ready():
+    print("gotowy")
+    #gowno z komendami
+    sync = await client.tree.sync()
+    
+
+#uruchomienie
+client.run(token)
