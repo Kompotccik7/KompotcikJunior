@@ -1,6 +1,7 @@
 import discord
 import json
 from discord.ext import commands
+import asyncio
 
 #ladowanie konfiguracji
 with open("config.json", "r") as file:
@@ -47,6 +48,18 @@ async def help(interaction: discord.Interaction):
         text="Mam nadzieje ze wiesz gdzie znalezc pomoc XD"
     )
     await interaction.response.send_message(embed=embed)
+
+#clearowanie
+@client.tree.command(name="clear", description="czysci czat")
+async def clear(interaction :discord.Interaction, amount:int):
+    #czyszczenie
+    await interaction.channel.purge(limit=amount)
+    #odpowiedz
+    await interaction.response.send_message(f"Usunalem {amount} wiadomosci")
+    #czekanie i usuwanie
+    await asyncio.sleep(2)
+    wiadomosc = await interaction.original_response()
+    await wiadomosc.delete()
 
 #start
 @client.event
