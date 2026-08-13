@@ -20,6 +20,10 @@ intents.members = True
 #klient
 client = commands.Bot(command_prefix='!',intents=intents)
 
+############################################################################
+#           jakies gowno do wywalenia
+############################################################################
+
 #pomoc
 @client.tree.command(name="pomoc", description="pomocy ratunku")
 async def help(interaction: discord.Interaction):   
@@ -53,6 +57,10 @@ async def help(interaction: discord.Interaction):
     )
     await interaction.response.send_message(embed=embed)
 
+############################################################################
+#                  EKSPERYMENTY
+############################################################################
+
 async def save_verf_config(message:discord.Message, role:discord.Role):
     if not os.path.exists("verf.json"):
        with open("verf.json", "w", encoding='utf-8') as f:
@@ -83,6 +91,26 @@ async def create_verification(interaction :discord.Interaction, message:str, rol
     await wiadomosc.add_reaction("✅")
     await save_verf_config(wiadomosc, role)
     await interaction.response.send_message("weryfikacja dodana", ephemeral=True)
+
+@client.event
+async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
+    with open("verf.json", "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    guild_id = str(payload.guild_id)
+    message_id = str(payload.message_id)
+
+    guild = client.get_guild(guild_id) or await client.fetch_guild(guild_id)
+
+    if guild_id in data:
+        if message_id in data[guild_id]:
+            role = guild.get_role(data[guild_id][message_id]["role_id"])
+            await payload.member.add_roles(role)
+
+
+############################################################################
+#                   STABILNE FUNKCJE
+############################################################################
 
 #clearowanie
 @client.tree.command(name="clear", description="czysci czat")
@@ -186,20 +214,6 @@ async def unban(interaction :discord.Interaction, member:discord.User, reason:st
     embed.add_field(name="Powod", value=reason)
     await interaction.response.send_message(embed=embed)
 
-@client.event
-async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
-    with open("verf.json", "r", encoding="utf-8") as f:
-        data = json.load(f)
-
-    guild_id = str(payload.guild_id)
-    message_id = str(payload.message_id)
-
-    guild = client.get_guild(guild_id) or await client.fetch_guild(guild_id)
-
-    if guild_id in data:
-        if message_id in data[guild_id]:
-            role = guild.get_role(data[guild_id][message_id]["role_id"])
-            await payload.member.add_roles(role)
 
 #start
 @client.event
