@@ -76,12 +76,8 @@ async def save_verf_config(message:discord.Message, role:discord.Role):
     with open("verf.json", "w", encoding='utf-8') as f:
         json.dump(data, f, indent=4)
 
-@client.tree.command(name="create_verification", description="tworzy weryfikacje")
+#do naprawy
 async def create_verification(interaction :discord.Interaction, message:str, role:discord.Role):
-    if not interaction.user.guild_permissions.manage_messages:
-        embed=discord.Embed(title=f"Nie ma masz uprawnien XD", color=discord.Color.orange())
-        await interaction.response.send_message(embed=embed, ephemeral=True)
-        return
     embed=discord.Embed(title=message, color=discord.Color.green())
     wiadomosc = await interaction.channel.send(embed=embed)
     await wiadomosc.add_reaction("✅")
@@ -96,7 +92,10 @@ async def clear(interaction :discord.Interaction, amount:int):
         await interaction.response.send_message(embed=embed, ephemeral=True)
         return
     #czyszczenie
-    await interaction.channel.purge(limit=amount)
+    try:
+        await interaction.channel.purge(limit=amount)
+    except:
+        print("by sie wywalilo ale i tak nikt sie nie dowie hehe")
     #odpowiedz
     await interaction.response.send_message(f"Usunalem {amount} wiadomosci")
     #czekanie i usuwanie
