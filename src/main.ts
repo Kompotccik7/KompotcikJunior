@@ -47,7 +47,7 @@ bot.on("interactionCreate", async (interaction) => {
     }
     //clear
     if (interaction.data.name === "clear") {
-        await interaction.defer();
+        await interaction.defer(64);
         const iloscopcja = interaction.data.options?.find(opt=>opt.name === "amount");
         const amount = iloscopcja?.value as number;
 
