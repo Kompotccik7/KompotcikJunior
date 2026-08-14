@@ -53,7 +53,8 @@ bot.on("interactionCreate", async (interaction) => {
 
         try{
             const usunietewiadomosci = await bot.purgeChannel(interaction.channel.id, {
-                limit: amount
+                limit: amount,
+                filterOld: true
             });
             await interaction.createFollowup({
                 content:'super dziala'
