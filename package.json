@@ -1,30 +1,16 @@
 {
   "name": "kompotcik-junior",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Kompotccik7/KompotcikJunior.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/Kompotccik7/KompotcikJunior/issues"
-  },
-  "homepage": "https://github.com/Kompotccik7/KompotcikJunior#readme",
-  "dependencies": {
-    "discord.js": "^14.27.0",
-    "dotenv": "^17.4.2"
-  },
+  "module": "./src/main.ts",
+  "type": "module",
+  "private": true,
   "devDependencies": {
-    "@types/node": "^26.2.0",
-    "tsx": "^4.23.12",
-    "typescript": "^7.0.2"
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "eris": "^0.18.0"
   }
 }
