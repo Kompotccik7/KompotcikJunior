@@ -14,18 +14,23 @@ intents:["guilds", "guildMessages", "messageContent", "guildMembers"]
 //chyba uruchamianie
 bot.on("ready", () => {
     console.log("Super dziala");
+
+    bot.createCommand({
+        name: "ping",
+        description: "Ping command"
+    });
 });
 
-//ping
-bot.createCommand({
-    name: "ping",
-    description: "Ping command",
-    type: 1
-});
-
+//ping pong
 bot.on("interactionCreate", interaction => {
     if (interaction.data.name === "ping") {
-        interaction.createMessage("pong");
+        const guildShard = bot.shards.get(0);
+        const apiPing = guildShard ? Math.round(guildShard.latency) : 0;
+        const startTime = Date.now();
+        const interactionTime = interaction.createdAt;
+        const botPing = startTime - interactionTime;
+        //wiem ze to nie jest najlepsze ale dziala 👍
+        interaction.createMessage("pong **" + botPing + "ms**");
     }
 });
 
