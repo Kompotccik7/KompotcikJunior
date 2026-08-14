@@ -1,4 +1,4 @@
-import Eris from "eris";
+import Eris, { Constants } from "eris";
 import fs from "fs"
 import path from "path"
 import dotenv from 'dotenv'
@@ -19,10 +19,23 @@ bot.on("ready", () => {
         name: "ping",
         description: "Ping command"
     });
+
+    bot.createCommand({
+        name: "clear",
+        description: "Clears chat",
+        options:[
+            {
+                name: "amount",
+                type: Constants.ApplicationCommandOptionTypes.INTEGER,
+                description: "amount",
+                required: true
+            }
+        ]
+    });
 });
 
-//ping pong
-bot.on("interactionCreate", interaction => {
+bot.on("interactionCreate", async (interaction) => {
+    //ping
     if (interaction.data.name === "ping") {
         const guildShard = bot.shards.get(0);
         const apiPing = guildShard ? Math.round(guildShard.latency) : 0;
@@ -32,7 +45,28 @@ bot.on("interactionCreate", interaction => {
         //wiem ze to nie jest najlepsze ale dziala 👍
         interaction.createMessage("pong **" + botPing + "ms**");
     }
+    //clear
+    if (interaction.data.name === "clear") {
+        await interaction.defer();
+        const iloscopcja = interaction.data.options?.find(opt=>opt.name === "amount");
+        const amount = iloscopcja?.value as number;
+
+        try{
+            const usunietewiadomosci = await bot.purgeChannel(interaction.channel.id, {
+                limit: amount
+            });
+            await interaction.createFollowup({
+                content:'super dziala'
+            });
+        }
+        catch (err){
+            console.error(err)
+        }
+    }
 });
+
+
+
 
 //to na pewno uruchamianie
 bot.connect();
