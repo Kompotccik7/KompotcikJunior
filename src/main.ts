@@ -52,12 +52,13 @@ bot.on("interactionCreate", async (interaction) => {
         const amount = iloscopcja?.value as number;
 
         try{
-            const usunietewiadomosci = await bot.purgeChannel(interaction.channel.id, {
+            const usunietewiadomosci = await bot.purgeChannel(interaction.channelID, {
                 limit: amount,
                 filterOld: true
             });
             await interaction.createFollowup({
-                content:'super dziala'
+                content:'super dziala',
+                flags: 64
             });
         }
         catch (err){
